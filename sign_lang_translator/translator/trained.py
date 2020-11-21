@@ -19,9 +19,6 @@ test = pd.read_csv(f"{directory}asl_dataset/asl_test.csv")
 y = test["label"]
 train_df.head()
 
-# plt.figure(figsize = (10,10)) # Label Count
-# sns.set_style("darkgrid")
-# sns.countplot(train_df["label"])
 
 y_train = train_df["label"]
 y_test = test_df["label"]
