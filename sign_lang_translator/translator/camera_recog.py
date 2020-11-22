@@ -2,64 +2,65 @@ import cv2
 
 from pandas import DataFrame
 
-font = cv2.FONT_HERSHEY_SIMPLEX
+from keras.models import load_model
+from skimage.transform import resize, pyramid_reduce
 
-# faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+FONT = cv2.FONT_HERSHEY_SIMPLEX
 
-video_capture = cv2.VideoCapture(0)
+def prediction(pred):
+    return(chr(pred+ 65))
 
-while True:
-    # Capture frame-by-frame
-    ret, frame = video_capture.read()
+def keras_predict(model, image):
+    data = np.asarray( image, dtype="int64" )
+    pred_probab = model.predict(data)[0]
+    pred_class = list(pred_probab).index(max(pred_probab))
+    return max(pred_probab), pred_class
 
-    # mirror
-    frame = cv2.flip(frame, 1)
 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+def main():
 
-    # facial recognition
-    # faces = faceCascade.detectMultiScale(
-    #     frame,
-    #     scaleFactor=1.1,
-    #     minNeighbors=5,
-    #     minSize=(30, 30),
-    #     flags=cv2.CASCADE_SCALE_IMAGE
-    # )
-
-    # ROI
+    
     c1 = 150
     r1 = 100
     size = 300
 
-    # crop region of interest
-    img = frame[r1:r1+size, c1:c1+size]
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    cv2.rectangle(frame, (c1, r1), (c1+size, r1+size), (0, 255, 0), 2)
+    video_capture = cv2.VideoCapture(0)
 
-    # Draw a rectangle around the faces
-    # for (x, y, w, h) in faces:
-    #     cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    while True:
+        # Capture frame-by-frame
+        ret, frame = video_capture.read()
 
-    # draw text
-    # cv2.putText(frame, "HEY", (10,450), font, 3, (0, 255, 0), 2, cv2.LINE_AA)
+        # mirror
+        frame = cv2.flip(frame, 1)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Display the resulting frame
-    cv2.imshow("Video", frame)
-    #cv2.imshow("gray", gray)
-    cv2.imshow("ROI", img)
+        # crop region of interest
+        img = frame[r1:r1+size, c1:c1+size]
 
-    img = cv2.resize(img, (28, 28))
-    df = DataFrame(data=img)
-    # df = df.values
-    # df = df.reshape(-1, 28, 28, 1)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        cv2.rectangle(frame, (c1, r1), (c1+size, r1+size), (0, 255, 0), 2)
 
-    print(df)
+        cv2.imshow("Video", frame)
+        cv2.imshow("ROI", img)
 
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        
-        # DataFrame(df).to_csv("file1.csv", index=True, index_label="pixel")
-        # df.to_csv("file1.csv", index=True, index_label="pixel")
-        break
+        img = cv2.resize(img, (28, 28))
+        img = img.reshape(1, 784)
+        df = DataFrame(data=img)
+        df = df.values
+        df = df/255
+        df = df.reshape(-1,28,28,1)
+
+        # print(df)
+
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            # print(df.shape)
+            # df.to_csv("file.csv")
+            #sleep(2)
+            break
+    
+
+if __name__ == '__main__':
+    main()
 
 # When everything is done, release the capture
 video_capture.release()
