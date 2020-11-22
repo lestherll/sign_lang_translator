@@ -12,9 +12,15 @@ from sklearn.preprocessing import LabelBinarizer
 # dir to translator folder
 directory = "sign_lang_translator/translator/"
 
+# Load pre trained model
+model = load_model(f"{directory}pre_trained/perfModel.h5")
+print("Loaded model from disk")
+
 # load test data
 test_df = pd.read_csv(f"{directory}asl_dataset/asl_test.csv")
 test = pd.read_csv(f"{directory}asl_dataset/asl_test.csv")
+
+print(test_df.iloc[0])
 
 # preprocessing
 y = test["label"]
@@ -32,10 +38,9 @@ x_test = x_test / 255
 
 # reshape data into 3d
 x_test = x_test.reshape(-1,28,28,1)
+print(x_test)
 
-# Load pre trained model
-model = load_model(f"{directory}pre_trained/model.h5")
-print("Loaded model from disk")
+
 
 # compile and test
 model.compile(loss="binary_crossentropy", optimizer="rmsprop", metrics=["accuracy"])
