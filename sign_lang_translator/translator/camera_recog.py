@@ -1,9 +1,12 @@
 import cv2
 
 from pandas import DataFrame
+import numpy as np
 
 from keras.models import load_model
 from skimage.transform import resize, pyramid_reduce
+
+model = load_model('sign_lang_translator/translator/pre_trained/model.h5')
 
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 
@@ -19,7 +22,6 @@ def keras_predict(model, image):
 
 def main():
 
-    
     c1 = 150
     r1 = 100
     size = 300
@@ -30,32 +32,27 @@ def main():
         # Capture frame-by-frame
         ret, frame = video_capture.read()
 
-        # mirror
-        frame = cv2.flip(frame, 1)
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
         # crop region of interest
-        img = frame[r1:r1+size, c1:c1+size]
+        cropped_img = frame[r1:r1+size, c1:c1+size]
+        gray = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2GRAY)
+        blurred_gray = cv2.GaussianBlur(gray, (15,15), 0)
+        resized_blurred_gray = cv2.resize(blurred_gray, (28,28), interpolation = cv2.INTER_AREA)
+    
+        # prepare input for prediction
+        inp_layer = np.resize(resized_blurred_gray, (28, 28, 1))
+        expanded = np.expand_dims(inp_layer, axis=0)
 
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # prediction
+        pred_probab, pred_class = keras_predict(model, expanded)    
+        curr = prediction(pred_class)        
+        cv2.putText(frame, curr, (450, 300), FONT, 4.0, (255, 255, 255))
+        
         cv2.rectangle(frame, (c1, r1), (c1+size, r1+size), (0, 255, 0), 2)
-
         cv2.imshow("Video", frame)
-        cv2.imshow("ROI", img)
-
-        img = cv2.resize(img, (28, 28))
-        img = img.reshape(1, 784)
-        df = DataFrame(data=img)
-        df = df.values
-        df = df/255
-        df = df.reshape(-1,28,28,1)
-
-        # print(df)
+        cv2.imshow("ROI", blurred_gray)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
-            # print(df.shape)
-            # df.to_csv("file.csv")
-            #sleep(2)
+            cv2.destroyAllWindows()
             break
     
 
