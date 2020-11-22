@@ -1,0 +1,110 @@
+#begin
+{
+	position: relative;
+	text-align: center;
+	margin-top:20%;
+}
+
+#quiz
+{
+	position: relative;
+	height : 200px;
+}
+
+#quizContainer
+{
+	position: relative;
+	text-align: center;
+	left:50%;
+	top:50%;
+	transform: translate(-50%,-50%);
+	display:inline-block;
+}
+#question
+{
+	position: relative;
+	top:2vh;
+}
+
+#questionNumber
+{
+	display:none;
+	font-size: 1em;
+	color: white;
+	position: absolute;
+	left:1vw;
+	top:-35px;
+}
+
+#choices
+{
+	width : 45vw;
+	position: absolute;
+	left:300px;
+	top : 100px;
+	padding : 10px;
+	display: inline;
+}
+
+.choice
+{
+	background-color: white;
+    display: none;
+    text-align: center;
+    color:black;
+	border : 1px solid white;
+	border-radius: 20px;
+	cursor: pointer;
+	width: 25vw;
+    margin: 0.5vh auto;
+	padding : 5px;
+}
+
+.choice:hover
+{
+	border : 2px solid white;
+	font-weight: bold;
+}
+
+#countdown
+{
+    font-size: 1em;
+	color: white;
+	display:inline;
+	position: absolute;
+	right:80px;
+	top:-15px;
+}
+
+#score
+{
+	margin : 20px auto;
+	height: 50vh;
+	width : 50vw;
+	position: relative;
+	display: none;
+}
+
+#score p
+{
+    position: relative;
+	display: block;
+	margin:0;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+	color: white;
+	font-size: 2em;
+	font-weight: bold;
+	text-align: center;
+}
+
+img
+{
+	width: 100%;
+	max-width: 300px;
+	max-height: 300px;
+	height: auto;
+	display: inline;
+	float:left;
+}

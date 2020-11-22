@@ -1,0 +1,30 @@
+<html>
+    <head >
+        <title> Quiz </title>
+        
+        <link rel = "stylesheet" type = "text/css" href = "quizStyle.css">
+        <link rel = "stylesheet" type = "text/css" href = "bootstrap.min.css">
+    </head>
+    <body background class = "bg-secondary text-white">
+        <div class = "container p-5 bg-dark text-white" id = "quizContainer">
+            <button type = "button" class = "btn btn-primary" id = "begin" onclick = "begin()">Begin</button>
+            <div id = "quiz">
+                <div id = "questionNumber"></div>
+                <div id = "question"> </div> 
+                <div id = "countdown"></div> 
+                <div id = "choices">
+                    <div class = "choice" id = "A" onclick = "checkAnswer('A')"></div>
+                    <div class = "choice" id = "B" onclick = "checkAnswer('B')"></div>
+                    <div class = "choice" id = "C" onclick = "checkAnswer('C')"></div>
+                    <div class = "choice" id = "D" onclick = "checkAnswer('D')"></div>
+                </div>
+                
+            </div>
+            <div id = "score" style = "display: none"></div>
+        </div>
+        
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type = "text/javascript" src = "quizScript.js"></script>
+        <script type = "text/javascript" src = "bootstrap.min.js"></script>   
+    </body>
+</html>
